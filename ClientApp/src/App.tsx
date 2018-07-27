@@ -1,22 +1,29 @@
 import * as React from 'react';
 import './App.css';
+import { inject, observer } from '../node_modules/mobx-react';
+import { Route, withRouter, RouteComponentProps } from 'react-router';
+import { AppState } from './appState';
+import Layout from './components/Layout';
+import Home from './pages/Home';
 
-import logo from './logo.svg';
+type PathParamsType = {
+  param1: string,
+}
 
-class App extends React.Component {
+// Your component own properties
+type PropsType = RouteComponentProps<PathParamsType> & {
+  appState?: AppState,
+}
+
+@inject('appState') @observer
+class App extends React.Component<PropsType> {
   public render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      <Layout>
+        <Route exact path='/' component={Home} />
+      </Layout>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
